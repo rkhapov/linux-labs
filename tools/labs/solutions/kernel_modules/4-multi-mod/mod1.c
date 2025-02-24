@@ -13,14 +13,14 @@ static int n1, n2;
 static int my_hello_init(void)
 {
 	n1 = 1; n2 = 2;
-	pr_info("n1 is %d, n2 is %d\n", n1, n2);
+	pr_info("[multimod] n1 is %d, n2 is %d\n", n1, n2);
 
 	return 0;
 }
 
 static void hello_exit(void)
 {
-	pr_info("sum is %d\n", add(n1, n2));
+	pr_info("[multimod] sum is %d\n", add(n1, n2));
 }
 
 module_init(my_hello_init);
