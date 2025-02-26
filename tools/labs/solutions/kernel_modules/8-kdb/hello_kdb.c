@@ -5,6 +5,26 @@
 int kdb_write_address;
 EXPORT_SYMBOL(kdb_write_address);
 
+void dummy_func18(void);
+void dummy_func17(void);
+void dummy_func16(void);
+void dummy_func15(void);
+void dummy_func14(void);
+void dummy_func13(void);
+void dummy_func12(void);
+void dummy_func11(void);
+void dummy_func10(void);
+void dummy_func9(void);
+void dummy_func8(void);
+void dummy_func7(void);
+void dummy_func6(void);
+void dummy_func5(void);
+void dummy_func4(void);
+void dummy_func3(void);
+void dummy_func2(void);
+void dummy_func1(void);
+
+
 noinline void dummy_func18(void)
 {
 	panic("Hello KDB has paniced!");
@@ -87,14 +107,14 @@ static int hello_proc_open(struct inode *inode, struct  file *file) {
 	return single_open(file, hello_proc_show, NULL);
 }
 
-static int edit_write(struct file *file, const char *buffer,
+static ssize_t edit_write(struct file *file, const char *buffer,
 		size_t count, loff_t *data)
 {
 	kdb_write_address += 1;
 	return count;
 }
 
-static int bug_write(struct file *file, const char *buffer,
+static ssize_t bug_write(struct file *file, const char *buffer,
 		size_t count, loff_t *data)
 {
 	dummy_func1();
