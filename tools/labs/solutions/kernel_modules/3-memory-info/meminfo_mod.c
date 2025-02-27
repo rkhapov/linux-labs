@@ -13,7 +13,13 @@ MODULE_DESCRIPTION("List current process vmas");
 MODULE_AUTHOR("Kernel Hacker");
 MODULE_LICENSE("GPL");
 
+static int target_pid = 0;
+
+module_param(target_pid, int, 0000);
+MODULE_PARM_DESC(target_pid, "A target process pid");
+
 noinline void print_mmap(struct task_struct*);
+noinline struct task_struct *find_task_by_pid(int);
 
 noinline void print_mmap(struct task_struct *p) {
 	printk(KERN_INFO "Process pid: %d, comm = %s\n", p->pid, p->comm);
@@ -35,16 +41,29 @@ noinline void print_mmap(struct task_struct *p) {
 	mmput(mm);
 }
 
+noinline struct task_struct *find_task_by_pid(int pid) {
+	struct task_struct *p;
+	for_each_process(p) {
+		if (p->pid == pid) {
+			return p;
+		}
+	}
+
+	return NULL;
+}
+
 static int my_proc_init(void)
 {
-	struct task_struct *p = get_current();
+	if (target_pid <= 0) {
+		printk(KERN_INFO "Target pid is invalid\n");
+		return 0;
+	}
 
-	print_mmap(p);
-
-	p = get_current();
-
-	for_each_process(p) {
-		print_mmap(p);
+	struct task_struct *t = find_task_by_pid(target_pid);
+	if (t != NULL) {
+		print_mmap(t);
+	} else {
+		printk(KERN_INFO "Can't find task with pid %d\n", target_pid);
 	}
 
 	return 0;
