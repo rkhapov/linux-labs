@@ -107,10 +107,21 @@ static int hello_proc_open(struct inode *inode, struct  file *file) {
 	return single_open(file, hello_proc_show, NULL);
 }
 
+void dummy1337(void);
+void dummy123123(void);
+
+noinline void dummy1337(void) {
+	kdb_write_address += 1;
+}
+
+noinline void dummy123123(void) {
+	dummy1337();
+}
+
 static ssize_t edit_write(struct file *file, const char *buffer,
 		size_t count, loff_t *data)
 {
-	kdb_write_address += 1;
+	dummy123123();
 	return count;
 }
 
